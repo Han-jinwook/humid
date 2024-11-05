@@ -37,6 +37,12 @@
             flex-direction: row;
             gap: 10px;
             justify-content: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #ffffff;
+            padding: 10px;
         }
         .input-container div {
             width: 45%;
@@ -51,7 +57,7 @@
         }
         .button-container {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 60px;
         }
         #calculateBtn {
             padding: 12px;
@@ -67,13 +73,13 @@
             background-color: #004d40;
         }
         #result {
-            margin-top: 15px;
+            margin-top: 75px;
             text-align: center;
             background-color: #e0f2f1;
             padding: 8px;
             border-radius: 8px;
             font-size: 1rem;
-            width: 70%; /* 폭을 줄임 */
+            width: 70%;
             margin-left: auto;
             margin-right: auto;
         }
@@ -84,7 +90,7 @@
             list-style-type: none;
             padding: 0;
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 * 2 배열 유지 */
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
         #resultsList li {
@@ -150,31 +156,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 전체 화면 모드로 전환 시도
-        function requestFullScreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { // Firefox
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { // IE/Edge
-                elem.msRequestFullscreen();
-            }
-        }
-
-        // 인앱 브라우저일 경우 전체 화면 전환 요청
-        requestFullScreen();
-        // 강제 확대 기능 설정
-        if (typeof window.visualViewport !== 'undefined') {
-            window.visualViewport.addEventListener('resize', () => {
-                document.body.style.zoom = 1;
-            });
-        }
-        const calculateBtn = document.getElementById('calculateBtn');
+        // 입력창 포커스 시 스크롤 방지
         const temperatureInput = document.getElementById('temperature');
         const humidityInput = document.getElementById('humidity');
+
+        temperatureInput.addEventListener('focus', () => {
+            window.scrollTo(0, 0);
+        });
+
+        humidityInput.addEventListener('focus', () => {
+            window.scrollTo(0, 0);
+        });
+
+        const calculateBtn = document.getElementById('calculateBtn');
 
         calculateBtn.addEventListener('click', function() {
             const temperature = parseFloat(temperatureInput.value);
