@@ -73,7 +73,7 @@
             padding: 8px;
             border-radius: 8px;
             font-size: 1rem;
-            width: 70%;
+            width: 70%; /* 폭을 줄임 */
             margin-left: auto;
             margin-right: auto;
         }
@@ -84,7 +84,7 @@
             list-style-type: none;
             padding: 0;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, 1fr); /* 2 * 2 배열 유지 */
             gap: 10px;
         }
         #resultsList li {
@@ -102,7 +102,6 @@
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            cursor: pointer; /* 클릭 가능하도록 변경 */
         }
         .ad-banner {
             margin-top: 30px;
@@ -114,7 +113,24 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        .open-browser-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #openBrowserBtn {
+            padding: 10px;
+            background-color: #ff9800;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        #openBrowserBtn:hover {
+            background-color: #e68900;
+        }
     </style>
+    
 </head>
 <body>
     <div class="container">
@@ -122,11 +138,11 @@
         <div class="input-container" style="margin-top: 20px;">
             <div>
                 <label for="temperature">온도 (℃):</label>
-                <input type="number" id="temperature" step="0.1" required>
+                <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
             </div>
             <div>
                 <label for="humidity">상대습도 (%):</label>
-                <input type="number" id="humidity" step="0.1" required>
+                <input type="number" id="humidity" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
             </div>
         </div>
         <div class="button-container">
@@ -146,6 +162,9 @@
             <a href="https://cafe.naver.com/sundreamd">
                 <img src="banner_image.png" alt="광고 배너 이미지">
             </a>
+        </div>
+        <div class="open-browser-container">
+            <button id="openBrowserBtn">기본 브라우저에서 열기</button>
         </div>
     </div>
 
@@ -192,10 +211,10 @@
             document.getElementById('averageValue').textContent = average;
         });
 
-        // 이미지 클릭 시 확대
-        const chartImage = document.getElementById('chartImage');
-        chartImage.addEventListener('click', () => {
-            chartImage.requestFullscreen();
+        // 기본 브라우저에서 열기 버튼 클릭 시 새 창 열기
+        const openBrowserBtn = document.getElementById('openBrowserBtn');
+        openBrowserBtn.addEventListener('click', function() {
+            window.open(window.location.href, '_blank');
         });
     });
 </script>
