@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>절대습도 계산기</title>
     <style>
         body {
@@ -20,7 +20,8 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             max-width: 450px;
-            width: 100%;
+            width: 90%;
+            box-sizing: border-box;
         }
         h1 {
             color: #00796b;
@@ -29,9 +30,17 @@
         }
         .input-container {
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .input-container div {
+            flex: 1;
+            min-width: 120px;
         }
         input {
-            width: calc(100% - 10px);
+            width: 100%;
             padding: 8px;
             border: 1px solid #b2dfdb;
             border-radius: 8px;
@@ -72,7 +81,7 @@
             list-style-type: none;
             padding: 0;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
         }
         #resultsList li {
@@ -101,7 +110,7 @@
 <body>
     <div class="container">
         <h1>절대습도 계산기</h1>
-        <div class="input-container" style="display: flex; gap: 10px; align-items: center;">
+        <div class="input-container">
             <div>
                 <label for="temperature">온도 (℃):</label>
                 <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
@@ -121,7 +130,6 @@
         <div id="pastResults">
             <h3 style="display: flex; justify-content: center; align-items: center;">최근 결과: <span id="averageHumidity" style="margin-left: 10px; color: #ff5722;">평균 <span id="averageValue"></span> g/m<sup>3</sup></span></h3>
             <ul id="resultsList"></ul>
-            
         </div>
         <div class="ad-banner">
             <a href="https://cafe.naver.com/sundreamd">
