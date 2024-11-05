@@ -151,13 +151,17 @@
         const temperatureInput = document.getElementById('temperature');
         const humidityInput = document.getElementById('humidity');
 
-        // 입력 필드가 클릭되면 해당 필드를 화면 중앙에 위치시키기 위해 scrollIntoView 사용
+        // 입력 필드가 클릭되면 해당 필드를 화면 중앙에 위치시키기 위해 window.scrollTo 사용
         temperatureInput.addEventListener('focus', function() {
-            temperatureInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                window.scrollTo({ top: temperatureInput.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+            }, 300);
         });
 
         humidityInput.addEventListener('focus', function() {
-            humidityInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                window.scrollTo({ top: humidityInput.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
+            }, 300);
         });
 
         calculateBtn.addEventListener('click', function() {
