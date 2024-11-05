@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>절대습도 계산기</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+        }
+        h1 {
+            color: #00796b;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        input {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+        #calculateBtn {
+            padding: 12px;
+            background-color: #00796b;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+            position: relative;
+            top: -15px; /* 입력창 높이 가운데로 조정 */
+        }
+        #calculateBtn:hover {
+            background-color: #004d40;
+        }
+        #result {
+            margin-top: 15px;
+            text-align: center;
+            background-color: #e0f2f1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        #pastResults {
+            margin-top: 25px;
+        }
+        #resultsList {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        #resultsList li {
+            background-color: #f1f8e9;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+        }
+        .reference-image {
+            margin-top: 25px;
+            text-align: center;
+        }
+        .ad-banner {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .ad-banner img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>절대습도 계산기</h1>
+        <div class="input-container" style="display: flex; gap: 10px; align-items: center;">
+            <div>
+                <label for="temperature">온도 (℃):</label>
+                <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
+            </div>
+            <div>
+                <label for="humidity">상대습도 (%):</label>
+                <input type="number" id="humidity" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
+            </div>
+            <button id="calculateBtn">계산하기</button>
+        </div>
+        <div id="result">
+            <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
+        </div>
+        <div class="reference-image">
+            <img src="humidity_chart.png" alt="습도 차트 참고 이미지">
+        </div>
+        <div id="pastResults">
+            <h3 style="display: flex; justify-content: center; align-items: center;">최근 결과: <span id="averageHumidity" style="margin-left: 10px; color: #ff5722;">평균 <span id="averageValue"></span> g/m<sup>3</sup></span></h3>
+            <ul id="resultsList"></ul>
+            
+        </div>
+        <div class="ad-banner">
+            <a href="https://cafe.naver.com/sundreamd">
+                <img src="banner_image.png" alt="광고 배너 이미지">
+            </a>
+        </div>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateBtn = document.getElementById('calculateBtn');
+        calculateBtn.addEventListener('click', function() {
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const humidity = parseFloat(document.getElementById('humidity').value);
+
+            if (isNaN(temperature) || isNaN(humidity)) {
+                alert('온도와 상대습도를 정확히 입력해주세요.');
+                return;
+            }
+
+            // 절대습도 계산
+            const absoluteHumidity = (6.112 * Math.exp((17.67 * temperature) / (temperature + 243.5)) * humidity * 2.167) / (273.15 + temperature);
+            const roundedHumidity = absoluteHumidity.toFixed(2);
+            document.getElementById('absoluteHumidity').textContent = roundedHumidity;
+
+            // 로컬 저장소에 저장된 결과 불러오기
+            let pastResults = JSON.parse(localStorage.getItem('pastResults')) || [];
+            pastResults.unshift(roundedHumidity); // 최신 값이 가장 위로 추가
+            if (pastResults.length > 4) {
+                pastResults = pastResults.slice(0, 4); // 최대 4개 결과 유지
+            }
+            localStorage.setItem('pastResults', JSON.stringify(pastResults));
+
+            // 최근 결과 업데이트
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            pastResults.forEach((result, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}) ${result} g/m³`;
+                resultsList.appendChild(listItem);
+            });
+
+            // 최근 4회 평균 계산
+            const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
+            const average = (sum / pastResults.length).toFixed(2);
+            document.getElementById('averageValue').textContent = average;
+        });
+    });
+</script>
+</body>
+</html>
