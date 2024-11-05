@@ -148,9 +148,21 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const calculateBtn = document.getElementById('calculateBtn');
+        const temperatureInput = document.getElementById('temperature');
+        const humidityInput = document.getElementById('humidity');
+
+        // 입력 필드가 클릭되면 해당 필드를 화면 중앙에 위치시키기 위해 scrollIntoView 사용
+        temperatureInput.addEventListener('focus', function() {
+            temperatureInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        humidityInput.addEventListener('focus', function() {
+            humidityInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
         calculateBtn.addEventListener('click', function() {
-            const temperature = parseFloat(document.getElementById('temperature').value);
-            const humidity = parseFloat(document.getElementById('humidity').value);
+            const temperature = parseFloat(temperatureInput.value);
+            const humidity = parseFloat(humidityInput.value);
 
             if (isNaN(temperature) || isNaN(humidity)) {
                 alert('온도와 상대습도를 정확히 입력해주세요.');
