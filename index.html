@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>절대습도 계산기</title>
@@ -72,7 +73,7 @@
             padding: 8px;
             border-radius: 8px;
             font-size: 1rem;
-            width: 80%;
+            width: 70%; /* 폭을 줄임 */
             margin-left: auto;
             margin-right: auto;
         }
@@ -153,19 +154,6 @@
         const temperatureInput = document.getElementById('temperature');
         const humidityInput = document.getElementById('humidity');
 
-        // 입력 필드가 클릭되면 해당 필드를 화면 중앙에 위치시키기 위해 window.scrollTo 사용
-        temperatureInput.addEventListener('focus', function() {
-            setTimeout(() => {
-                window.scrollTo({ top: temperatureInput.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
-            }, 300);
-        });
-
-        humidityInput.addEventListener('focus', function() {
-            setTimeout(() => {
-                window.scrollTo({ top: humidityInput.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' });
-            }, 300);
-        });
-
         calculateBtn.addEventListener('click', function() {
             const temperature = parseFloat(temperatureInput.value);
             const humidity = parseFloat(humidityInput.value);
@@ -203,6 +191,19 @@
             document.getElementById('averageValue').textContent = average;
         });
     });
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker 등록 성공:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker 등록 실패:', error);
+          });
+      });
+    }
 </script>
 </body>
 </html>
