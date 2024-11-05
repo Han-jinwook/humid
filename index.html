@@ -97,17 +97,12 @@
         .reference-image {
             margin-top: 25px;
             text-align: center;
-            position: relative;
         }
         .reference-image img {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
             cursor: pointer;
-        }
-        .reference-image img:hover {
-            transform: scale(1.2);
-            transition: transform 0.3s ease;
         }
         .ad-banner {
             margin-top: 30px;
@@ -118,6 +113,38 @@
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .modal-content {
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
     
@@ -142,9 +169,7 @@
             <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
         </div>
         <div class="reference-image">
-            <a href="#" onclick="showPopup('humidity_chart.png')">
-                <img src="humidity_chart.png" alt="습도 차트 참고 이미지">
-            </a>
+            <img id="chartImage" src="humidity_chart.png" alt="습도 차트 참고 이미지">
         </div>
         <div id="pastResults">
             <h3 style="display: flex; justify-content: center; align-items: center;">최근 결과: <span id="averageHumidity" style="margin-left: 10px; color: #ff5722;">평균 <span id="averageValue"></span> g/m<sup>3</sup></span></h3>
@@ -156,68 +181,92 @@
             </a>
         </div>
     </div>
+    
+    <!-- 이미지 모달 -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <img id="modalImage" src="" alt="큰 이미지" style="width: 100%; height: auto;">
+        </div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calculateBtn = document.getElementById('calculateBtn');
-            const temperatureInput = document.getElementById('temperature');
-            const humidityInput = document.getElementById('humidity');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateBtn = document.getElementById('calculateBtn');
+        const temperatureInput = document.getElementById('temperature');
+        const humidityInput = document.getElementById('humidity');
 
-            calculateBtn.addEventListener('click', function() {
-                const temperature = parseFloat(temperatureInput.value);
-                const humidity = parseFloat(humidityInput.value);
+        calculateBtn.addEventListener('click', function() {
+            const temperature = parseFloat(temperatureInput.value);
+            const humidity = parseFloat(humidityInput.value);
 
-                if (isNaN(temperature) || isNaN(humidity)) {
-                    alert('온도와 상대습도를 정확히 입력해주세요.');
-                    return;
-                }
+            if (isNaN(temperature) || isNaN(humidity)) {
+                alert('온도와 상대습도를 정확히 입력해주세요.');
+                return;
+            }
 
-                // 절대습도 계산
-                const absoluteHumidity = (6.112 * Math.exp((17.67 * temperature) / (temperature + 243.5)) * humidity * 2.167) / (273.15 + temperature);
-                const roundedHumidity = absoluteHumidity.toFixed(2);
-                document.getElementById('absoluteHumidity').textContent = roundedHumidity;
+            // 절대습도 계산
+            const absoluteHumidity = (6.112 * Math.exp((17.67 * temperature) / (temperature + 243.5)) * humidity * 2.167) / (273.15 + temperature);
+            const roundedHumidity = absoluteHumidity.toFixed(2);
+            document.getElementById('absoluteHumidity').textContent = roundedHumidity;
 
-                // 로컬 저장소에 저장된 결과 불러오기
-                let pastResults = JSON.parse(localStorage.getItem('pastResults')) || [];
-                pastResults.unshift(roundedHumidity); // 최신 값이 가장 위로 추가
-                if (pastResults.length > 4) {
-                    pastResults = pastResults.slice(0, 4); // 최대 4개 결과 유지
-                }
-                localStorage.setItem('pastResults', JSON.stringify(pastResults));
+            // 로컬 저장소에 저장된 결과 불러오기
+            let pastResults = JSON.parse(localStorage.getItem('pastResults')) || [];
+            pastResults.unshift(roundedHumidity); // 최신 값이 가장 위로 추가
+            if (pastResults.length > 4) {
+                pastResults = pastResults.slice(0, 4); // 최대 4개 결과 유지
+            }
+            localStorage.setItem('pastResults', JSON.stringify(pastResults));
 
-                // 최근 결과 업데이트
-                const resultsList = document.getElementById('resultsList');
-                resultsList.innerHTML = '';
-                pastResults.forEach((result, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${index + 1}) ${result} g/m³`;
-                    resultsList.appendChild(listItem);
-                });
-
-                // 최근 4회 평균 계산
-                const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
-                const average = (sum / pastResults.length).toFixed(2);
-                document.getElementById('averageValue').textContent = average;
+            // 최근 결과 업데이트
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            pastResults.forEach((result, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}) ${result} g/m³`;
+                resultsList.appendChild(listItem);
             });
+
+            // 최근 4회 평균 계산
+            const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
+            const average = (sum / pastResults.length).toFixed(2);
+            document.getElementById('averageValue').textContent = average;
         });
 
-        function showPopup(imageSrc) {
-            const popup = window.open("", "_blank", "width=600,height=400");
-            popup.document.write(`<html><head><title>Image Popup</title></head><body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;"><img src="${imageSrc}" style="max-width:100%;height:auto;"></body></html>`);
-        }
-    </script>
-    <script>
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js')
-              .then((registration) => {
-                console.log('Service Worker 등록 성공:', registration);
-              })
-              .catch((error) => {
-                console.log('Service Worker 등록 실패:', error);
-              });
+        // 모달 기능 추가
+        const chartImage = document.getElementById('chartImage');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeModal = document.getElementById('closeModal');
+
+        chartImage.addEventListener('click', function() {
+            modalImage.src = chartImage.src;
+            imageModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', function() {
+            imageModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+    });
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker 등록 성공:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker 등록 실패:', error);
           });
-        }
-    </script>
+      });
+    }
+</script>
 </body>
 </html>
