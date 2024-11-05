@@ -120,10 +120,15 @@
     <div class="container">
         <h1>절대습도 계산기</h1>
         <div class="input-container" style="margin-top: 20px;">
-            <div>
-                <label for="temperature">온도 (℃):</label>
-                <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
-            </div>
+    <div>
+        <label for="temperature">온도 (℃):</label>
+        <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
+    </div>
+    <div>
+        <label for="humidity">상대습도 (%):</label>
+        <input type="number" id="humidity" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
+    </div>
+</div>
             <div>
                 <label for="humidity">상대습도 (%):</label>
                 <input type="number" id="humidity" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
@@ -135,11 +140,11 @@
             </div>
         </div>
         <div class="button-container">
-            <button id="calculateBtn">계산하기</button>
-        </div>
-        <div id="result" style="width: 60%; margin: 20px auto;">
-            <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
-        </div>
+    <button id="calculateBtn">계산하기</button>
+</div>
+        <div id="result" style="width: 80%; margin: 20px auto;">
+    <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
+</div>
         <div class="reference-image">
             <a href="humidity_chart.png" target="_blank">
                 <img src="humidity_chart.png" alt="습도 차트 참고 이미지" style="cursor: pointer; max-width: 100%; height: auto;">
