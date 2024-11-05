@@ -13,14 +13,16 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             background-color: #ffffff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             max-width: 450px;
-            width: 90%;
+            width: 100%;
             box-sizing: border-box;
         }
         h1 {
@@ -61,7 +63,7 @@
             font-size: 1.2rem;
             transition: background-color 0.3s ease;
             position: relative;
-            top: -15px; /* 입력창 높이 가운데로 조정 */
+            top: -10px; /* 입력창 높이 가운데로 조정 */
         }
         #calculateBtn:hover {
             background-color: #004d40;
@@ -89,11 +91,16 @@
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .reference-image {
             margin-top: 25px;
             text-align: center;
+        }
+        .reference-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
         }
         .ad-banner {
             margin-top: 30px;
@@ -101,6 +108,7 @@
         }
         .ad-banner img {
             max-width: 100%;
+            height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
