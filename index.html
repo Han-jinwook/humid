@@ -73,7 +73,7 @@
             padding: 8px;
             border-radius: 8px;
             font-size: 1rem;
-            width: 80%; /* 폭을 줄임 */
+            width: 70%; /* 폭을 줄임 */
             margin-left: auto;
             margin-right: auto;
         }
@@ -102,7 +102,6 @@
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            cursor: pointer;
         }
         .ad-banner {
             margin-top: 30px;
@@ -113,38 +112,6 @@
             height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        /* 모달 스타일 */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        .modal-content {
-            margin: 10% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            background-color: #fff;
-            border-radius: 10px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
         }
     </style>
     
@@ -165,7 +132,7 @@
         <div class="button-container">
             <button id="calculateBtn">계산하기</button>
         </div>
-        <div id="result" style="width: 80%; margin: 20px auto;">
+        <div id="result" style="width: 70%; margin: 20px auto;">
             <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
         </div>
         <div class="reference-image">
@@ -179,14 +146,6 @@
             <a href="https://cafe.naver.com/sundreamd">
                 <img src="banner_image.png" alt="광고 배너 이미지">
             </a>
-        </div>
-    </div>
-    
-    <!-- 이미지 모달 -->
-    <div id="imageModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <img id="modalImage" src="" alt="큰 이미지" style="width: 100%; height: auto;">
         </div>
     </div>
 
@@ -231,27 +190,6 @@
             const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
             const average = (sum / pastResults.length).toFixed(2);
             document.getElementById('averageValue').textContent = average;
-        });
-
-        // 모달 기능 추가
-        const chartImage = document.getElementById('chartImage');
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.getElementById('closeModal');
-
-        chartImage.addEventListener('click', function() {
-            modalImage.src = chartImage.src;
-            imageModal.style.display = 'block';
-        });
-
-        closeModal.addEventListener('click', function() {
-            imageModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target == imageModal) {
-                imageModal.style.display = 'none';
-            }
         });
     });
 </script>
