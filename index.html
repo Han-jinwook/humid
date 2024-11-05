@@ -3,7 +3,7 @@
 <head>
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0">
     <title>절대습도 계산기</title>
     <style>
         body {
@@ -113,24 +113,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .open-browser-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        #openBrowserBtn {
-            padding: 10px;
-            background-color: #ff9800;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        #openBrowserBtn:hover {
-            background-color: #e68900;
-        }
     </style>
-    
 </head>
 <body>
     <div class="container">
@@ -162,9 +145,6 @@
             <a href="https://cafe.naver.com/sundreamd">
                 <img src="banner_image.png" alt="광고 배너 이미지">
             </a>
-        </div>
-        <div class="open-browser-container">
-            <button id="openBrowserBtn">기본 브라우저에서 열기</button>
         </div>
     </div>
 
@@ -209,12 +189,6 @@
             const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
             const average = (sum / pastResults.length).toFixed(2);
             document.getElementById('averageValue').textContent = average;
-        });
-
-        // 기본 브라우저에서 열기 버튼 클릭 시 새 창 열기
-        const openBrowserBtn = document.getElementById('openBrowserBtn');
-        openBrowserBtn.addEventListener('click', function() {
-            window.open(window.location.href, '_blank');
         });
     });
 </script>
