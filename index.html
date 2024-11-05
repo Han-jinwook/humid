@@ -33,13 +33,12 @@
         .input-container {
             margin-bottom: 20px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 10px;
             align-items: center;
         }
         .input-container div {
-            flex: 1;
-            min-width: 120px;
+            width: 100%;
         }
         input {
             width: 100%;
@@ -51,7 +50,7 @@
         }
         .button-container {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         #calculateBtn {
             padding: 12px;
@@ -62,8 +61,6 @@
             cursor: pointer;
             font-size: 1.2rem;
             transition: background-color 0.3s ease;
-            position: relative;
-            top: -10px; /* 입력창 높이 가운데로 조정 */
         }
         #calculateBtn:hover {
             background-color: #004d40;
@@ -72,9 +69,12 @@
             margin-top: 15px;
             text-align: center;
             background-color: #e0f2f1;
-            padding: 10px;
+            padding: 8px;
             border-radius: 8px;
             font-size: 1rem;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
         }
         #pastResults {
             margin-top: 25px;
@@ -127,7 +127,9 @@
                 <label for="humidity">상대습도 (%):</label>
                 <input type="number" id="humidity" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
             </div>
-            <button id="calculateBtn">계산하기</button>
+            <div class="button-container">
+                <button id="calculateBtn">계산하기</button>
+            </div>
         </div>
         <div id="result">
             <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
