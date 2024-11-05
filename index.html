@@ -150,6 +150,22 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 전체 화면 모드로 전환 시도
+        function requestFullScreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // 인앱 브라우저일 경우 전체 화면 전환 요청
+        requestFullScreen();
         // 강제 확대 기능 설정
         if (typeof window.visualViewport !== 'undefined') {
             window.visualViewport.addEventListener('resize', () => {
