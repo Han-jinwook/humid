@@ -9,20 +9,20 @@
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #e0f7fa;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             background-color: #ffffff;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
+            max-width: 450px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -34,17 +34,16 @@
         .input-container {
             margin-bottom: 20px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row;
             gap: 10px;
-            justify-content: space-between;
+            justify-content: center;
         }
         .input-container div {
-            flex: 1;
-            min-width: 45%;
+            width: 45%;
         }
         input {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #b2dfdb;
             border-radius: 8px;
             box-sizing: border-box;
@@ -52,10 +51,10 @@
         }
         .button-container {
             text-align: center;
-            margin: 20px 0;
+            margin-top: 20px;
         }
         #calculateBtn {
-            padding: 12px 20px;
+            padding: 12px;
             background-color: #00796b;
             color: #ffffff;
             border: none;
@@ -71,10 +70,10 @@
             margin-top: 15px;
             text-align: center;
             background-color: #e0f2f1;
-            padding: 15px;
+            padding: 8px;
             border-radius: 8px;
-            font-size: 1.1rem;
-            max-width: 80%;
+            font-size: 1rem;
+            width: 60%; /* 폭을 줄임 */
             margin-left: auto;
             margin-right: auto;
         }
@@ -85,7 +84,7 @@
             list-style-type: none;
             padding: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(2, 1fr); /* 2 * 2 배열 유지 */
             gap: 10px;
         }
         #resultsList li {
@@ -116,11 +115,12 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
+    
 </head>
 <body>
     <div class="container">
         <h1>절대습도 계산기</h1>
-        <div class="input-container">
+        <div class="input-container" style="margin-top: 20px;">
             <div>
                 <label for="temperature">온도 (℃):</label>
                 <input type="number" id="temperature" step="0.1" required style="-moz-appearance: textfield; -webkit-appearance: none; appearance: textfield;">
@@ -133,16 +133,16 @@
         <div class="button-container">
             <button id="calculateBtn">계산하기</button>
         </div>
-        <div id="result">
+        <div id="result" style="width: 80%; margin: 20px auto;">
             <h2>절대습도 결과: <span id="absoluteHumidity"></span> g/m<sup>3</sup></h2>
         </div>
         <div class="reference-image">
             <a href="humidity_chart.png" target="_blank">
-                <img src="humidity_chart.png" alt="습도 차트 참고 이미지">
+                <img src="humidity_chart.png" alt="습도 차트 참고 이미지" style="cursor: pointer; max-width: 100%; height: auto;" onclick="this.style.transform = 'scale(1.5)'; this.style.transition = 'transform 0.3s ease';">
             </a>
         </div>
         <div id="pastResults">
-            <h3 style="text-align: center;">최근 결과: <span id="averageHumidity" style="color: #ff5722;">평균 <span id="averageValue"></span> g/m<sup>3</sup></span></h3>
+            <h3 style="display: flex; justify-content: center; align-items: center;">최근 결과: <span id="averageHumidity" style="margin-left: 10px; color: #ff5722;">평균 <span id="averageValue"></span> g/m<sup>3</sup></span></h3>
             <ul id="resultsList"></ul>
         </div>
         <div class="ad-banner">
@@ -151,62 +151,62 @@
             </a>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calculateBtn = document.getElementById('calculateBtn');
-            const temperatureInput = document.getElementById('temperature');
-            const humidityInput = document.getElementById('humidity');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateBtn = document.getElementById('calculateBtn');
+        const temperatureInput = document.getElementById('temperature');
+        const humidityInput = document.getElementById('humidity');
 
-            calculateBtn.addEventListener('click', function() {
-                const temperature = parseFloat(temperatureInput.value);
-                const humidity = parseFloat(humidityInput.value);
+        calculateBtn.addEventListener('click', function() {
+            const temperature = parseFloat(temperatureInput.value);
+            const humidity = parseFloat(humidityInput.value);
 
-                if (isNaN(temperature) || isNaN(humidity)) {
-                    alert('온도와 상대습도를 정확히 입력해주세요.');
-                    return;
-                }
+            if (isNaN(temperature) || isNaN(humidity)) {
+                alert('온도와 상대습도를 정확히 입력해주세요.');
+                return;
+            }
 
-                // 절대습도 계산
-                const absoluteHumidity = (6.112 * Math.exp((17.67 * temperature) / (temperature + 243.5)) * humidity * 2.167) / (273.15 + temperature);
-                const roundedHumidity = absoluteHumidity.toFixed(2);
-                document.getElementById('absoluteHumidity').textContent = roundedHumidity;
+            // 절대습도 계산
+            const absoluteHumidity = (6.112 * Math.exp((17.67 * temperature) / (temperature + 243.5)) * humidity * 2.167) / (273.15 + temperature);
+            const roundedHumidity = absoluteHumidity.toFixed(2);
+            document.getElementById('absoluteHumidity').textContent = roundedHumidity;
 
-                // 로컬 저장소에 저장된 결과 불러오기
-                let pastResults = JSON.parse(localStorage.getItem('pastResults')) || [];
-                pastResults.unshift(roundedHumidity); // 최신 값이 가장 위로 추가
-                if (pastResults.length > 4) {
-                    pastResults = pastResults.slice(0, 4); // 최대 4개 결과 유지
-                }
-                localStorage.setItem('pastResults', JSON.stringify(pastResults));
+            // 로컬 저장소에 저장된 결과 불러오기
+            let pastResults = JSON.parse(localStorage.getItem('pastResults')) || [];
+            pastResults.unshift(roundedHumidity); // 최신 값이 가장 위로 추가
+            if (pastResults.length > 4) {
+                pastResults = pastResults.slice(0, 4); // 최대 4개 결과 유지
+            }
+            localStorage.setItem('pastResults', JSON.stringify(pastResults));
 
-                // 최근 결과 업데이트
-                const resultsList = document.getElementById('resultsList');
-                resultsList.innerHTML = '';
-                pastResults.forEach((result, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${index + 1}) ${result} g/m³`;
-                    resultsList.appendChild(listItem);
-                });
-
-                // 최근 4회 평균 계산
-                const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
-                const average = (sum / pastResults.length).toFixed(2);
-                document.getElementById('averageValue').textContent = average;
+            // 최근 결과 업데이트
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            pastResults.forEach((result, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}) ${result} g/m³`;
+                resultsList.appendChild(listItem);
             });
+
+            // 최근 4회 평균 계산
+            const sum = pastResults.reduce((acc, val) => acc + parseFloat(val), 0);
+            const average = (sum / pastResults.length).toFixed(2);
+            document.getElementById('averageValue').textContent = average;
         });
-
-        // PWA service worker registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then((registration) => {
-                        console.log('Service Worker 등록 성공:', registration);
-                    })
-                    .catch((error) => {
-                        console.log('Service Worker 등록 실패:', error);
-                    });
-            });
-        }
-    </script>
+    });
+</script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker 등록 성공:', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker 등록 실패:', error);
+          });
+      });
+    }
+</script>
 </body>
 </html>
