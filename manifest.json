@@ -1,9 +1,9 @@
 {
   "name": "절대습도 계산기",
   "short_name": "습도 계산기",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#e0f7fa",
+  "background_color": "#ffffff",
   "theme_color": "#00796b",
   "icons": [
     {
